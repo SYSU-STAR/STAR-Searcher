@@ -3,7 +3,7 @@
 >
 > *IEEE Robotics and Automation Letters* (**RA-L** 2024)
 
-This repository contains the codebase and associated resources for our [paper]([https://arxiv.org/pdf/2402.16348]) titled **"Star-Searcher: **An Efficient Aerial **S**ystem for **Tar**get **Search** in Unknown **E**nvi**r**onments ". This work tackles the challenge of autonomous target search using unmanned aerial vehicles (UAVs) in complex unknown environments.
+This repository contains the codebase and associated resources for our [paper]([https://arxiv.org/pdf/2402.16348]) titled "**Star-Searcher:** An Efficient Aerial **S**ystem for **Tar**get **Search** in Unknown **E**nvi**r**onments ". This work tackles the challenge of autonomous target search using unmanned aerial vehicles (UAVs) in complex unknown environments.
 
 The project involves novel algorithms for:
 
@@ -11,7 +11,7 @@ The project involves novel algorithms for:
 - **History-aware path planning**, which utilizes historical path information to prevent inconsistency in consecutive planning processes.
 - Other useful tools for autonomous search tasks.
 
-<img src="/home/lym/code/star-searcher/src/img/Intro.jpg" style="zoom:50%;" />
+<img src="./img/Intro.jpg" style="zoom:50%;" />
 
 Video links on [Youtube](https://www.youtube.com/watch?v=08ll_oo_DtU&t=9s) and [Bilibili](https://www.bilibili.com/video/BV1Wy4y1c7vj/?spm_id_from=333.337.search-card.all.click&vd_source=aae82f386a0df1c60f9e0c6925a430e4). Please kindly star ⭐ this project if it helps you. 
 
