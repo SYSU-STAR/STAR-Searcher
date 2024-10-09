@@ -1,0 +1,35 @@
+# Lee position controller parameters
+# (1)加上弹簧弹跳轨迹跟踪最好
+# 第一组(poly traj true, hand traj false)
+# 姿态控不稳，轨迹跟踪很好
+position_gain: {x: 6, y: 6, z: 30}
+velocity_gain: {x: 8, y: 8, z: 12}
+attitude_gain: {x: 2, y: 5, z: 0.15}
+angular_rate_gain: {x: 0.4, y: 0.83, z: 0.18}
+# 第二组(hand traj true, poly traj false)
+# 姿态控不稳，轨迹跟踪很好
+position_gain: {x: 6, y: 6, z: 30}
+velocity_gain: {x: 4.7, y: 4.7, z: 12}
+attitude_gain: {x: 2, y: 3, z: 0.15}
+angular_rate_gain: {x: 0.4, y: 0.6, z: 0.18}
+
+
+# (2)加上弹簧平飞最稳的参数
+# 姿态较快收敛，碰撞后轨迹无法完全跟终，但普适性强，hand和poly轨迹都能用
+position_gain: {x: 6, y: 6, z: 30}
+velocity_gain: {x: 4.7, y: 4.7, z: 12}
+attitude_gain: {x: 2, y: 5, z: 0.15}
+angular_rate_gain: {x: 0.4, y: 0.83, z: 0.18}
+
+# 不加弹簧平飞
+position_gain: {x: 6, y: 6, z: 6}
+velocity_gain: {x: 4.7, y: 4.7, z: 4.7}
+attitude_gain: {x: 2, y: 5, z: 0.15}
+angular_rate_gain: {x: 0.4, y: 0.83, z: 0.18}
+
+#原始参数
+position_gain: {x: 6, y: 6, z: 6}
+velocity_gain: {x: 4.7, y: 4.7, z: 4.7}
+attitude_gain: {x: 2, y: 3, z: 0.15}
+angular_rate_gain: {x: 0.4, y: 0.52, z: 0.18}
+

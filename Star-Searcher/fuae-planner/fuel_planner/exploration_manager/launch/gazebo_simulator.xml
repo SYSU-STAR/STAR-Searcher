@@ -1,0 +1,69 @@
+<launch>
+  <arg name="mav_name" default="ardrone"/>
+  <arg name="world_name" default="basic"/>
+  <arg name="enable_logging" default="false" />
+  <arg name="enable_ground_truth" default="true" />
+  <arg name="log_file" default="$(arg mav_name)" />
+  <arg name="debug" default="false"/>
+  <arg name="gui" default="true"/>
+  <arg name="paused" default="false"/>
+  <!-- The following line causes gzmsg and gzerr messages to be printed to the console
+      (even when Gazebo is started through roslaunch) -->
+  <arg name="verbose" default="false"/>
+  <arg name="respawn_gazebo" default="false"/>
+
+  <arg name="odometry_topic"/>
+  <arg name="init_x"/>
+  <arg name="init_y"/>
+  <arg name="init_z"/>
+
+  <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
+  <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- 千万不要忘记，在.world文件中添加    <plugin name='ros_interface_plugin' filename='librotors_gazebo_ros_interface_plugin.so'/> -->
+    <!-- 否则将无法运行仿真 -->
+    <arg name="world_name" value="$(find fuae_gazebo)/worlds/real0316.world" />
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="paused" value="$(arg paused)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="verbose" value="$(arg verbose)"/>
+    <arg name="respawn_gazebo" value="$(arg respawn_gazebo)"/>
+  </include>
+
+  <group ns="$(arg mav_name)">
+    <include file="$(find fuae_gazebo)/launch/spawn_mav.launch">
+      <arg name="mav_name" value="$(arg mav_name)" />
+      <arg name="odometry_topic" value="$(arg odometry_topic)" />
+      <arg name="model" value="$(find fuae_gazebo)/urdf/bounce_mav.gazebo" />
+      <arg name="enable_logging" value="$(arg enable_logging)" />
+      <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+      <arg name="log_file" value="$(arg log_file)"/>
+      <arg name="x" value="$(arg init_x)"/>
+      <arg name="y" value="$(arg init_y)"/>
+      <arg name="z" value="$(arg init_z)"/>
+      <arg name="roll" value="0.0"/>
+      <arg name="pitch" value="0.0"/>
+      <arg name="yaw" value="-1.57"/>
+    </include>
+    
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    <node name="odom_visualization" pkg="odom_visualization" type="odom_visualization" output="screen">
+      <remap from="odom_visualization/odom" to="$(arg odometry_topic)" />
+      <param name="mesh_resource" value="package://odom_visualization/meshes/hummingbird.mesh" />
+      <!-- <param name="mesh_resource" value="package://rotors_description/meshes/ardrone.dae" /> -->
+      <param name="color/r" value="0" />
+      <param name="color/g" value="0" />
+      <param name="color/b" value="1" />
+      <param name="color/a" value="1" />
+      <param name="robot_scale" value="1.0"/>
+
+    </node>
+    
+    <!-- <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find exploration_manager)/rviz/plan_manage.rviz" /> -->
+  <include file="$(find exploration_manager)/launch/rviz.launch" />
+
+  </group>
+
+</launch>

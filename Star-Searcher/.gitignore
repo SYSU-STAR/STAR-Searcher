@@ -1,0 +1,5 @@
+/.vscode
+/fuae-planner/fuel_planner/utils/lkh_tsp_solver/resource/
+fuae-planner/fuel_planner/utils/lkh_tsp_solver/resource/single.par
+fuae-planner/fuel_planner/utils/lkh_tsp_solver/resource/single.txt
+fuae-planner/fuel_planner/utils/lkh_tsp_solver/resource/single.tsp

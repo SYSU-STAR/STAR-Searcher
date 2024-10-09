@@ -1,0 +1,1 @@
+bool startFlag  #接收到trigger标志位

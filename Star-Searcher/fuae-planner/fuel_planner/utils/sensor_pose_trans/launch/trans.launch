@@ -1,0 +1,5 @@
+<node pkg="sensor_pose_trans" type="sensor_pose_trans_node" name="sensor_pose_trans_node" output="screen">
+  <param name="estimation_rate"  value="15.0"/>
+
+  <remap from="~odometry"   to="$(arg odometry_topic)"/>
+</node>

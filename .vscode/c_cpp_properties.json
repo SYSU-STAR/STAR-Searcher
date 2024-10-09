@@ -1,0 +1,51 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${default}",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "/home/lym/code/FUAE_dev/devel/include/**",
+                "/home/lym/catkin_ws/devel/include/**",
+                "/opt/ros/noetic/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/active_perception/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/apriltag_ros/apriltag_ros/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/bspline/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/bspline_opt/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/exploration_manager/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/fuae_gazebo/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/utils/lkh_tsp_solver/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/local_sensing/include/**",
+                "/home/lym/catkin_ws/src/mav_comm/mav_msgs/include/**",
+                "/home/lym/catkin_ws/src/mav_comm/mav_planning_msgs/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/Utils/multi_map_server/include/**",
+                "/home/lym/catkin_ws/src/nlopt/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/path_searching/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/plan_env/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/plan_manage/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/poly_traj/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/Utils/pose_utils/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/Utils/quadrotor_msgs/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/gazebo_plugins/realsense_gazebo_plugin/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/rotors_simulator/rotors_control/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/rotors_simulator/rotors_gazebo_plugins/include/**",
+                "/home/lym/catkin_ws/src/rotors_simulator/rotors_hil_interface/include/**",
+                "/home/lym/catkin_ws/src/rotors_simulator/rotors_joy_interface/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/so3_control/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/so3_disturbance_generator/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/so3_quadrotor_simulator/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/traj_utils/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/uav_simulator/Utils/uav_utils/include/**",
+                "/home/lym/code/FUAE_dev/src/FUAE/velodyne_simulator/velodyne_gazebo_plugins/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
+}

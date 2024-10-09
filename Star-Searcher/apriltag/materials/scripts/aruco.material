@@ -1,0 +1,169 @@
+material apriltag/Diffuse0
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-0.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material apriltag/Diffuse1
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-1.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material apriltag/Diffuse2
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-2.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material apriltag/Diffuse3
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-3.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material apriltag/Diffuse4
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-4.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material apriltag/Diffuse5
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-5.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material apriltag/Diffuse6
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-6.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material apriltag/Diffuse7
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-7.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material startflag/Diffuse
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture h.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
+
+material startflag/Diffuse1
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture apriltag-0.png
+				filtering anistropic
+				max_anisotropy 16
+			}
+		}
+	}
+}
