@@ -1,0 +1,4 @@
+PROBLEM_FILE = /home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/utils/lkh_tsp_solver/resource/cluster.tsp
+GAIN23 = NO
+OUTPUT_TOUR_FILE =/home/lym/code/FUAE_dev/src/FUAE/fuae-planner/fuel_planner/utils/lkh_tsp_solver/resource/cluster.txt
+RUNS = 1

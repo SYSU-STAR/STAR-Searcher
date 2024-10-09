@@ -1,0 +1,8 @@
+<launch>
+  <arg name="world_name" default="$(find fuae_gazebo)/worlds/MAP1.world" />
+  <include file="$(find exploration_manager)/launch/env_simulator.xml">
+      <arg name="world_name" value="$(arg world_name)"  />
+  </include>
+
+  <node pkg="gazebo_map_generator" name="random_obstacle" type="random_obstacle" output="log" />
+</launch>

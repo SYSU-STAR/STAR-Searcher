@@ -1,0 +1,11 @@
+NAME : single_frontier.221.tour
+COMMENT : Length = 221
+COMMENT : Found by LKH [Keld Helsgaun] Wed Oct  9 15:32:11 2024
+TYPE : TOUR
+DIMENSION : 3
+TOUR_SECTION
+1
+2
+3
+-1
+EOF
