@@ -40,8 +40,9 @@ public:
                                const Eigen::MatrixXd &pts_uv,
                                const Eigen::MatrixXd &lidar_pts,
                                const Eigen::Vector3d &lidar_pos);
-  void inputPointCloud(const pcl::PointCloud<pcl::PointXYZ> &points,
-                       const int &point_num, const Eigen::Vector3d &camera_pos);
+  void inputPointCloud(
+                                const pcl::PointCloud<pcl::PointXYZ>& points, const int& point_num,
+                                const Eigen::Vector3d& camera_pos, bool air);
 
   void posToIndex(const Eigen::Vector3d &pos, Eigen::Vector3i &id);
   void indexToPos(const Eigen::Vector3i &id, Eigen::Vector3d &pos);

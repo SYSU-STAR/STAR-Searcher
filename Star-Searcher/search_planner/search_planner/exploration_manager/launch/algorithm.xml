@@ -99,6 +99,14 @@
     <param name="map_ros/camera_lidar_fusion/lidar_tf_source_frame" type="str" value="ardrone/velodyne" />
     <param name="map_ros/camera_lidar_fusion/observe_update_dist" type="double" value="$(arg observe_update_dist)" />
 
+    <param name="map_ros/h_fov"                         value="360.0"/>
+    <param name="map_ros/v_fov_min"                     value="-37.0"/>
+    <param name="map_ros/v_fov_max"                     value="45.0"/>
+    <param name="map_ros/inf_fov"                       value="4.0"/>
+    <param name="map_ros/h_res"                         value="1.0"/>
+    <param name="map_ros/v_res"                         value="1.0"/>
+    <param name="map_ros/dil_pixels"                    value="3"/>
+
     <!-- Fsm -->
     <param name="fsm/thresh_replan1" value="0.5" type="double" />
     <param name="fsm/thresh_replan2" value="0.5" type="double" /> 

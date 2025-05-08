@@ -51,6 +51,16 @@ void MapROS::init() {
   lidar2cam_trans << 0.033, -0.010, -0.100;
   K << cl_fx_, 0.0, cl_cx_, 0.0, cl_fy_, cl_cy_, 0.0, 0.0, 1.0;
 
+  // * LiDAR Air Projection
+  node_.param("map_ros/h_fov", h_fov_, 360.0);
+  node_.param("map_ros/v_fov_min", v_fov_min_, 0.0);
+  node_.param("map_ros/v_fov_max", v_fov_max_, 0.0);
+  node_.param("map_ros/inf_fov", inf_fov_, 0.0);
+  node_.param("map_ros/h_res", h_res_, 0.2);
+  node_.param("map_ros/v_res", v_res_, 0.2);
+  node_.param("sdf_map/max_ray_length", mapping_visible_dist_, 0.0);
+  node_.param("map_ros/dil_pixels", dil_pixels_, 0);
+
   proj_points_.resize(640 * 480 / (skip_pixel_ * skip_pixel_));
   point_cloud_.points.resize(640 * 480 / (skip_pixel_ * skip_pixel_));
   // proj_points_.reserve(640 * 480 / map_->mp_->skip_pixel_ /
@@ -209,7 +219,7 @@ void MapROS::depthPoseCallback(const sensor_msgs::ImageConstPtr &img,
 
   // generate point cloud, update map
   proessDepthImage();
-  map_->inputPointCloud(point_cloud_, proj_points_cnt, camera_pos_);
+  map_->inputPointCloud(point_cloud_, proj_points_cnt, camera_pos_, false);
   if (local_updated_) {
     map_->clearAndInflateLocalMap();
     esdf_need_update_ = true;
@@ -320,17 +330,148 @@ void MapROS::cloudPoseCallback(const sensor_msgs::PointCloud2ConstPtr &msg,
   camera_q_ =
       Eigen::Quaterniond(pose->pose.orientation.w, pose->pose.orientation.x,
                          pose->pose.orientation.y, pose->pose.orientation.z);
+
+  tf::Quaternion tfQuat_body;
+  tf::quaternionMsgToTF(pose->pose.orientation, tfQuat_body);
+  tf::Matrix3x3 m_body(tfQuat_body);
+  double roll_body, pitch_body, yaw_body;
+  m_body.getRPY(roll_body, pitch_body, yaw_body);
+
+  Eigen::Matrix3d body2world_R_matrix;
+
+  body2world_R_matrix = Eigen::AngleAxisd(yaw_body, Eigen::Vector3d::UnitZ()) *
+                        Eigen::AngleAxisd(pitch_body, Eigen::Vector3d::UnitY()) *
+                        Eigen::AngleAxisd(roll_body, Eigen::Vector3d::UnitX());
+  Eigen::Vector3d body2world_t_vector = camera_pos_;
+
+  Eigen::Matrix3d sensor2world_R_matrix;
+  Eigen::Vector3d sensor2world_t_vector;
+
+  sensor2world_R_matrix = body2world_R_matrix;
+  sensor2world_t_vector = body2world_t_vector;
+
   pcl::PointCloud<pcl::PointXYZ> cloud;
   pcl::fromROSMsg(*msg, cloud);
   int num = cloud.points.size();
 
-  map_->inputPointCloud(cloud, num, camera_pos_);
+  pcl::PointCloud<pcl::PointXYZ> air_cloud = generateAirPointCloud(cloud, sensor2world_R_matrix, sensor2world_t_vector);
+  int air_num = air_cloud.points.size();
+
+  map_->inputPointCloud(air_cloud, air_num, camera_pos_, true);
+  map_->inputPointCloud(cloud, num, camera_pos_, false);
 
   if (local_updated_) {
     map_->clearAndInflateLocalMap();
     esdf_need_update_ = true;
     local_updated_ = false;
   }
+}
+
+pcl::PointCloud<pcl::PointXYZ> MapROS::generateAirPointCloud(
+  const pcl::PointCloud<pcl::PointXYZ>& input_cloud, 
+  const Eigen::Matrix3d& R_sensor2world, 
+  const Eigen::Vector3d& t_sensor2world)
+{
+  pcl::PointCloud<pcl::PointXYZ> air_inf_cloud;
+
+  const double horizontal_fov = this->h_fov_;
+  const double vertical_fov_min = this->v_fov_min_ + this->inf_fov_;
+  const double vertical_fov_max = this->v_fov_max_ - this->inf_fov_;
+  const double horizontal_resolution = this->h_res_;
+  const double vertical_resolution = this->v_res_;
+  const double max_depth = this->mapping_visible_dist_ + 0.5;
+  const double min_depth = 0.5;
+
+  int cols = static_cast<int>(horizontal_fov / horizontal_resolution);
+  int rows = static_cast<int>((vertical_fov_max - vertical_fov_min) / vertical_resolution);
+
+  Eigen::MatrixXd depth_map = Eigen::MatrixXd::Constant(rows, cols, max_depth);
+  double horizontal_fov_min = -horizontal_fov / 2.0;
+
+  for (const auto& pt : input_cloud.points) 
+  {
+    Eigen::Vector3d pt_world(pt.x, pt.y, pt.z);
+    Eigen::Vector3d pt_sensor = R_sensor2world.transpose() * (pt_world - t_sensor2world);
+
+    
+    double horizontal_angle = std::atan2(pt_sensor.y(), pt_sensor.x()) * 180.0 / M_PI;
+    double vertical_angle = std::atan2(pt_sensor.z(), std::sqrt(pt_sensor.x() * pt_sensor.x() + pt_sensor.y() * pt_sensor.y())) * 180.0 / M_PI;
+
+    if (horizontal_angle < horizontal_fov_min || horizontal_angle > -horizontal_fov_min ||
+        vertical_angle < vertical_fov_min || vertical_angle > vertical_fov_max) continue;
+
+    int u = static_cast<int>((horizontal_angle - horizontal_fov_min) / horizontal_resolution);
+    int v = static_cast<int>((vertical_angle - vertical_fov_min) / vertical_resolution);
+
+    if (u >= 0 && u < cols && v >= 0 && v < rows) 
+    {
+      double depth = pt_sensor.norm();
+      depth_map(v, u) = std::min(depth_map(v, u), depth);
+    }
+  }
+
+  int dilation_radius = this->dil_pixels_;
+  Eigen::MatrixXd depth_map_dilated = depth_map;
+
+  for (int v = 0; v < rows; v++) 
+  {
+    for (int u = 0; u < cols; u++) 
+    {
+      if (depth_map(v, u) < max_depth && depth_map(v, u) >= min_depth) 
+      {
+        for (int dv = -dilation_radius; dv <= dilation_radius; dv++) 
+        {
+          for (int du = -dilation_radius; du <= dilation_radius; du++) 
+          {
+            int u_neighbor = u + du;
+            int v_neighbor = v + dv;
+
+            if (u_neighbor >= 0 && u_neighbor < cols && v_neighbor >= 0 && v_neighbor < rows) 
+            {
+              if (depth_map(v_neighbor, u_neighbor) < max_depth && depth_map(v_neighbor, u_neighbor) >= min_depth) continue;
+              depth_map_dilated(v_neighbor, u_neighbor) = 0.9*min_depth;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  for (int v = 0; v < rows; v++) 
+  {
+    for (int u = 0; u < cols; u++) 
+    {
+      double depth = depth_map_dilated(v, u);
+
+      if (depth < max_depth) continue;
+
+      if (depth >= max_depth) depth = max_depth;
+
+      double horizontal_angle = horizontal_fov_min + u * horizontal_resolution;
+      double vertical_angle = vertical_fov_min + v * vertical_resolution;
+
+      Eigen::Vector3d direction;
+      direction.x() = std::cos(horizontal_angle * M_PI / 180.0) * std::cos(vertical_angle * M_PI / 180.0);
+      direction.y() = std::sin(horizontal_angle * M_PI / 180.0) * std::cos(vertical_angle * M_PI / 180.0);
+      direction.z() = std::sin(vertical_angle * M_PI / 180.0);
+
+      Eigen::Vector3d pt_sensor = direction * depth;
+
+      Eigen::Vector3d pt_world = R_sensor2world * pt_sensor + t_sensor2world;
+
+      pcl::PointXYZ pt;
+      pt.x = pt_world.x();
+      pt.y = pt_world.y();
+      pt.z = pt_world.z();
+      air_inf_cloud.points.push_back(pt);
+    }
+  }
+
+  air_inf_cloud.width = air_inf_cloud.points.size();
+  air_inf_cloud.height = 1;
+  air_inf_cloud.is_dense = true;
+
+  return air_inf_cloud;
 }
 
 void MapROS::proessDepthImage() {

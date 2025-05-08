@@ -16,6 +16,7 @@
 #include <memory>
 #include <random>
 #include <tf/transform_listener.h>
+#include <tf/tf.h>
 
 using std::default_random_engine;
 using std::normal_distribution;
@@ -53,6 +54,7 @@ private:
 
   void proessDepthImage();
   void processFusionCloud();
+  pcl::PointCloud<pcl::PointXYZ> generateAirPointCloud(const pcl::PointCloud<pcl::PointXYZ>& input_cloud, const Eigen::Matrix3d& R_sensor2world, const Eigen::Vector3d& t_sensor2world);
 
   SDFMap *map_;
   // may use ExactTime?
@@ -113,6 +115,12 @@ private:
   double k_depth_scaling_factor_;
   int skip_pixel_;
   std::string frame_id_;
+
+  // params, lidar air projection
+  double h_fov_, v_fov_min_, v_fov_max_, inf_fov_;
+  double h_res_, v_res_;
+  double mapping_visible_dist_;
+  int dil_pixels_;
 
   // msg publication
   double esdf_slice_height_;

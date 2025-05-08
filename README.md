@@ -1,5 +1,5 @@
 # STAR-Searcher
-> [Yiming Luo](https://github.com/ymLuo1214) , Zixuan Zhuang, Neng Pan, Chen Feng, Shaojie Shen, Fei Gao, Hui Cheng and [Boyu Zhou](https://sysu-star.com/).
+> [Yiming Luo](https://github.com/ymLuo1214) , Zixuan Zhuang, Neng Pan, [Chen Feng](https://chen-albert-feng.github.io/AlbertFeng.github.io/), [Shaojie Shen](https://uav.hkust.edu.hk/group/), Fei Gao, Hui Cheng and [Boyu Zhou](https://sysu-star.com/).
 >
 > *IEEE Robotics and Automation Letters* (**RA-L** 2024)
 
